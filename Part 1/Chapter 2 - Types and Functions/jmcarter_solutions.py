@@ -102,3 +102,22 @@ def test_void_unit_bool_category():
     assert NOT(True) is False
     assert NOT(False) is True
     assert unit(True) is None
+
+# Test Fib
+def fib(n):
+    if  n < 2:
+        return 1
+    return fib(n - 1) + fib(n - 2)
+f = memoize(fib)
+from time import time
+a = time()
+f(30)
+print(time() - a)
+
+a = time()
+f(30)
+print(time() - a)
+
+a = time()
+f(31)
+print(time() - a)

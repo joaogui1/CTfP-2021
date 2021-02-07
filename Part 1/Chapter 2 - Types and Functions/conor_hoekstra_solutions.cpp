@@ -1,7 +1,8 @@
 // https://www.godbolt.org/z/G8WzE4
 
 #include <map>
-#include "fmt/core.h"
+#include <chrono>
+#include <iostream>
 
 // Challenge 1
 
@@ -44,19 +45,44 @@ auto fals_(bool b) -> bool { return false; }
 
 // ¯\_(ツ)_/¯
 
+
+// Fib
+int fib(int n){
+    if(n < 2)   return 1;
+    return fib(n - 1) + fib(n - 2);
+}
+
 auto main() -> int {
 
     auto plus1_memo = memoize([](auto e) { return e + 1; });
 
-    fmt::print("{}\n", plus1_memo(1));
-    fmt::print("{}\n", plus1_memo(2));
-    fmt::print("{}\n", plus1_memo(1));
+    std::cout << plus1_memo(1) << "\n";
+    std::cout << plus1_memo(2) << "\n";
+    std::cout << plus1_memo(1) << "\n";
 
     auto lcg_memo = memoize(lcg{});
 
-    fmt::print("{}\n", lcg_memo(1)); // 36532
-    fmt::print("{}\n", lcg_memo(1)); // 36532
-    fmt::print("{}\n", lcg_memo(2)); // 44653
+    std::cout << lcg_memo(1) << "\n"; // 36532
+    std::cout << lcg_memo(1) << "\n"; // 36532
+    std::cout << lcg_memo(2) << "\n"; // 44653
 
+    auto f = memoize(fib);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    f(30);
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+    std::cout << duration << "\n";
+    
+    t1 = std::chrono::high_resolution_clock::now();
+    f(30);
+    t2 = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+    std::cout << duration << "\n";
+
+    t1 = std::chrono::high_resolution_clock::now();
+    f(31);
+    t2 = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+    std::cout << duration << "\n";
     return 0;
 }
